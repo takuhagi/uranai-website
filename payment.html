@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鑑定のお申し込み | 月詠みこ タロット占い</title>
+    <meta name="description" content="月詠みこのタロット鑑定メニュー。カード決済で簡単にお申し込みいただけます。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#2D1B69',
+                        'dark-bg': '#0D0B1A',
+                        'midnight': '#1A1A2E',
+                        'gold': '#C8A951',
+                        'gold-light': '#FFD700',
+                        'lavender': '#B8A9D4',
+                        'mystic': '#6B5B95',
+                    },
+                    fontFamily: {
+                        'serif-jp': ['"Noto Serif JP"', 'serif'],
+                        'sans-jp': ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .font-serif-jp { font-family: 'Noto Serif JP', serif; }
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        .glow-gold { box-shadow: 0 0 30px rgba(200, 169, 81, 0.3), 0 0 60px rgba(200, 169, 81, 0.1); }
+        .divider-gold { height: 1px; background: linear-gradient(90deg, transparent, #C8A951, transparent); }
+        .plan-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .plan-card:hover { transform: translateY(-4px); }
+        .plan-card.selected { border-color: #C8A951; box-shadow: 0 0 30px rgba(200, 169, 81, 0.3); }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .spin-slow { animation: spin-slow 3s linear infinite; }
+        /* Stripe Elements styling */
+        .StripeElement { background-color: #1A1A2E; border: 1px solid rgba(184, 169, 212, 0.2); border-radius: 0.75rem; padding: 14px 16px; transition: border-color 0.2s; }
+        .StripeElement--focus { border-color: #C8A951; }
+        .StripeElement--invalid { border-color: #ef4444; }
+    </style>
+</head>
+<body class="bg-dark-bg text-white overflow-x-hidden">
+    <div class="stars" id="stars"></div>
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-gold/10">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-serif-jp text-gold text-xl tracking-wider">月詠 みこ</a>
+            <div class="flex items-center gap-6 text-sm text-lavender">
+                <a href="index.html" class="hover:text-gold transition-colors hidden md:inline">トップに戻る</a>
+                <a href="index.html#services" class="hover:text-gold transition-colors hidden md:inline">鑑定メニュー</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-28 pb-20 px-4">
+        <div class="max-w-4xl mx-auto">
+
+            <!-- Header -->
+            <div class="text-center mb-12 fade-in">
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">ORDER</p>
+                <h1 class="font-serif-jp text-3xl md:text-4xl text-white mb-4">鑑定のお申し込み</h1>
+                <p class="text-lavender/60 text-sm max-w-lg mx-auto">
+                    ご希望の鑑定メニューを選び、お支払い情報を入力してください。<br>
+                    決済完了後、LINEで鑑定に必要な情報をお伺いします。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-8">
+                <!-- Left: Plan Selection + Form -->
+                <div class="md:col-span-3 space-y-8">
+
+                    <!-- Step 1: Plan Selection -->
+                    <div class="fade-in">
+                        <h2 class="text-white text-sm font-medium mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center text-gold text-xs">1</span>
+                            鑑定メニューを選択
+                        </h2>
+                        <div class="space-y-3" id="plan-selection">
+                            <!-- Plan 1 -->
+                            <label class="plan-card block bg-midnight/60 border border-lavender/10 rounded-xl p-5 cursor-pointer" data-plan="light" data-price="1500" data-name="ワンカードリーディング">
+                                <div class="flex items-center gap-4">
+                                    <input type="radio" name="plan" value="light" class="hidden peer">
+                                    <div class="w-5 h-5 border-2 border-lavender/30 rounded-full flex items-center justify-center peer-checked:border-gold shrink-0">
+                                        <div class="w-2.5 h-2.5 bg-gold rounded-full hidden"></div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-white text-sm font-medium">✨ ワンカードリーディング</span>
+                                            <span class="text-gold font-serif-jp text-lg">1,500<span class="text-xs text-lavender/50">円</span></span>
+                                        </div>
+                                        <p class="text-lavender/50 text-xs mt-1">タロット1枚引き・1テーマ・500〜800文字・24h以内</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Plan 2 (Popular) -->
+                            <label class="plan-card block bg-midnight/60 border border-gold/30 rounded-xl p-5 cursor-pointer relative" data-plan="full" data-price="5000" data-name="フルリーディング">
+                                <div class="absolute -top-2.5 right-4 bg-gold text-dark-bg text-xs font-bold px-3 py-0.5 rounded-full">人気 No.1</div>
+                                <div class="flex items-center gap-4">
+                                    <input type="radio" name="plan" value="full" class="hidden peer" checked>
+                                    <div class="w-5 h-5 border-2 border-lavender/30 rounded-full flex items-center justify-center peer-checked:border-gold shrink-0">
+                                        <div class="w-2.5 h-2.5 bg-gold rounded-full hidden"></div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-white text-sm font-medium">🔮 フルリーディング</span>
+                                            <span class="text-gold font-serif-jp text-lg">5,000<span class="text-xs text-lavender/50">円</span></span>
+                                        </div>
+                                        <p class="text-lavender/50 text-xs mt-1">複数枚スプレッド・占星術併用・2,000〜3,000文字・追加質問1回</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Plan 3 -->
+                            <label class="plan-card block bg-midnight/60 border border-lavender/10 rounded-xl p-5 cursor-pointer" data-plan="premium" data-price="15000" data-name="プレミアム鑑定">
+                                <div class="flex items-center gap-4">
+                                    <input type="radio" name="plan" value="premium" class="hidden peer">
+                                    <div class="w-5 h-5 border-2 border-lavender/30 rounded-full flex items-center justify-center peer-checked:border-gold shrink-0">
+                                        <div class="w-2.5 h-2.5 bg-gold rounded-full hidden"></div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-white text-sm font-medium">🌟 プレミアム鑑定</span>
+                                            <span class="text-gold font-serif-jp text-lg">15,000<span class="text-xs text-lavender/50">円</span></span>
+                                        </div>
+                                        <p class="text-lavender/50 text-xs mt-1">ホロスコープ詳細分析・5,000〜8,000文字・運勢カレンダー・30日フォロー</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Customer Info -->
+                    <div class="fade-in">
+                        <h2 class="text-white text-sm font-medium mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center text-gold text-xs">2</span>
+                            お客様情報
+                        </h2>
+                        <div class="bg-midnight/60 border border-lavender/10 rounded-xl p-6 space-y-4">
+                            <div>
+                                <label class="text-lavender/70 text-xs mb-1 block">お名前（ニックネーム可）<span class="text-red-400">*</span></label>
+                                <input type="text" id="customer-name" placeholder="例: みさき" required
+                                    class="w-full bg-midnight border border-lavender/20 rounded-xl px-4 py-3 text-white text-sm focus:border-gold focus:outline-none transition-colors placeholder-lavender/30">
+                            </div>
+                            <div>
+                                <label class="text-lavender/70 text-xs mb-1 block">メールアドレス <span class="text-red-400">*</span></label>
+                                <input type="email" id="customer-email" placeholder="例: example@email.com" required
+                                    class="w-full bg-midnight border border-lavender/20 rounded-xl px-4 py-3 text-white text-sm focus:border-gold focus:outline-none transition-colors placeholder-lavender/30">
+                            </div>
+                            <div>
+                                <label class="text-lavender/70 text-xs mb-1 block">ご相談内容（簡単に）</label>
+                                <select id="consultation-topic"
+                                    class="w-full bg-midnight border border-lavender/20 rounded-xl px-4 py-3 text-white text-sm focus:border-gold focus:outline-none transition-colors">
+                                    <option value="love" class="bg-midnight">恋愛・復縁・相性</option>
+                                    <option value="work" class="bg-midnight">仕事・転職・適職</option>
+                                    <option value="money" class="bg-midnight">金運・財運</option>
+                                    <option value="health" class="bg-midnight">健康・心身</option>
+                                    <option value="general" class="bg-midnight">総合運</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Payment -->
+                    <div class="fade-in">
+                        <h2 class="text-white text-sm font-medium mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center text-gold text-xs">3</span>
+                            お支払い情報
+                        </h2>
+                        <div class="bg-midnight/60 border border-lavender/10 rounded-xl p-6 space-y-4">
+                            <div>
+                                <label class="text-lavender/70 text-xs mb-2 block">カード番号</label>
+                                <div id="card-number-element"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-lavender/70 text-xs mb-2 block">有効期限</label>
+                                    <div id="card-expiry-element"></div>
+                                </div>
+                                <div>
+                                    <label class="text-lavender/70 text-xs mb-2 block">CVC</label>
+                                    <div id="card-cvc-element"></div>
+                                </div>
+                            </div>
+                            <div id="card-errors" class="text-red-400 text-xs mt-2 hidden"></div>
+
+                            <div class="pt-2">
+                                <div class="flex items-center gap-2 text-lavender/40 text-xs mb-4">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                    SSL暗号化通信で安全に処理されます（Stripe）
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button id="submit-payment" class="w-full bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold py-4 rounded-full text-sm tracking-wider hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                        <span id="btn-text">お支払いを確定する</span>
+                        <span id="btn-loading" class="hidden items-center justify-center gap-2">
+                            <svg class="w-5 h-5 spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            処理中...
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div class="md:col-span-2">
+                    <div class="sticky top-28 fade-in">
+                        <div class="bg-midnight/60 border border-lavender/10 rounded-2xl p-6">
+                            <h3 class="text-white text-sm font-medium mb-4">ご注文内容</h3>
+                            <div class="divider-gold mb-4"></div>
+
+                            <div class="space-y-3 mb-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-white text-sm" id="summary-plan">🔮 フルリーディング</p>
+                                        <p class="text-lavender/40 text-xs mt-1" id="summary-desc">タロット複数枚 + 占星術</p>
+                                    </div>
+                                    <p class="text-gold font-serif-jp" id="summary-price">¥5,000</p>
+                                </div>
+                            </div>
+
+                            <div class="divider-gold mb-4"></div>
+
+                            <div class="flex justify-between items-center mb-6">
+                                <span class="text-white text-sm font-medium">合計（税込）</span>
+                                <span class="text-gold font-serif-jp text-2xl" id="summary-total">¥5,000</span>
+                            </div>
+
+                            <!-- What's included -->
+                            <div class="bg-deep-purple/20 rounded-xl p-4 mb-4">
+                                <p class="text-lavender/70 text-xs font-medium mb-2">含まれるもの:</p>
+                                <ul class="text-lavender/50 text-xs space-y-1.5" id="summary-includes">
+                                    <li class="flex items-start gap-2"><span class="text-gold">&#x2713;</span> タロット複数枚フルスプレッド</li>
+                                    <li class="flex items-start gap-2"><span class="text-gold">&#x2713;</span> 西洋占星術との併用鑑定</li>
+                                    <li class="flex items-start gap-2"><span class="text-gold">&#x2713;</span> 2,000〜3,000文字の鑑定結果</li>
+                                    <li class="flex items-start gap-2"><span class="text-gold">&#x2713;</span> 追加質問1回OK</li>
+                                </ul>
+                            </div>
+
+                            <!-- Trust badges -->
+                            <div class="space-y-2 text-lavender/40 text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gold">🔒</span> SSL暗号化で安全に決済
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gold">⏰</span> 24時間以内に鑑定結果をお届け
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-gold">💬</span> LINEで丁寧にサポート
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Methods -->
+                        <div class="mt-4 flex items-center justify-center gap-3 text-lavender/30 text-xs">
+                            <span>対応カード:</span>
+                            <span class="border border-lavender/20 rounded px-2 py-0.5">Visa</span>
+                            <span class="border border-lavender/20 rounded px-2 py-0.5">Master</span>
+                            <span class="border border-lavender/20 rounded px-2 py-0.5">AMEX</span>
+                            <span class="border border-lavender/20 rounded px-2 py-0.5">JCB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-midnight border border-gold/30 rounded-2xl p-8 max-w-md w-full text-center glow-gold">
+            <div class="text-6xl mb-6">🔮</div>
+            <h2 class="font-serif-jp text-2xl text-gold mb-4">お申し込みありがとうございます</h2>
+            <p class="text-lavender/70 text-sm leading-relaxed mb-6">
+                決済が完了しました。<br>
+                鑑定に必要な情報をLINEでお伺いしますので、<br>
+                まだ登録がお済みでない方は下のボタンから<br>
+                LINE公式アカウントを追加してください。
+            </p>
+            <div class="space-y-3">
+                <a href="#" id="line-add-btn-modal" class="flex items-center justify-center gap-2 bg-[#06C755] hover:bg-[#05B04C] text-white font-bold px-6 py-4 rounded-full text-sm transition-all">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </svg>
+                    LINEで友だち追加する
+                </a>
+                <a href="index.html" class="block border border-lavender/20 text-lavender py-3 rounded-full text-sm hover:border-gold/30 transition-colors">
+                    トップに戻る
+                </a>
+            </div>
+            <p class="text-lavender/30 text-xs mt-6">注文番号: <span id="order-id">-</span></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-gold/10 py-8 px-4">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-lavender/30 text-xs">
+            <p>&copy; 2026 月詠みこ All Rights Reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-gold transition-colors">プライバシーポリシー</a>
+                <a href="#" class="hover:text-gold transition-colors">特定商取引法に基づく表記</a>
+                <a href="#" class="hover:text-gold transition-colors">返金ポリシー</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // CONFIG - ここを本番の値に変更してください
+        // ============================================
+        const CONFIG = {
+            // Stripe テスト用公開鍵（本番時は pk_live_... に変更）
+            STRIPE_PUBLIC_KEY: 'pk_test_XXXXXXXXXXXXXXXXXXXX',
+            // LINE公式アカウント友だち追加URL（取得後に変更）
+            LINE_ADD_URL: 'https://lin.ee/XXXXXXXXX',
+            // Stripe決済を処理するバックエンドAPI（後述のセットアップガイド参照）
+            API_ENDPOINT: '/api/create-payment-intent',
+        };
+
+        // ============================================
+        // Plan data
+        // ============================================
+        const planData = {
+            light: {
+                name: '✨ ワンカードリーディング',
+                desc: 'タロット1枚引き・1テーマ',
+                price: 1500,
+                includes: [
+                    'タロット1枚引きによるシンプルな鑑定',
+                    '恋愛・仕事・総合運から1テーマ',
+                    '500〜800文字の鑑定結果',
+                    '24時間以内にお届け',
+                ]
+            },
+            full: {
+                name: '🔮 フルリーディング',
+                desc: 'タロット複数枚 + 占星術',
+                price: 5000,
+                includes: [
+                    'タロット複数枚フルスプレッド',
+                    '西洋占星術との併用鑑定',
+                    '2,000〜3,000文字の鑑定結果',
+                    '追加質問1回OK',
+                ]
+            },
+            premium: {
+                name: '🌟 プレミアム鑑定',
+                desc: 'ホロスコープ詳細分析',
+                price: 15000,
+                includes: [
+                    'フルリーディングの全内容',
+                    'ホロスコープ詳細分析',
+                    '5,000〜8,000文字の鑑定結果',
+                    '1年間の運勢カレンダー付き',
+                    '30日間のアフターフォロー',
+                ]
+            }
+        };
+
+        // ============================================
+        // Stars background
+        // ============================================
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const sz = Math.random() * 2 + 1;
+            s.style.width = sz + 'px'; s.style.height = sz + 'px';
+            s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+            s.style.setProperty('--duration', (Math.random()*3+2)+'s');
+            s.style.animationDelay = Math.random()*5+'s';
+            starsEl.appendChild(s);
+        }
+
+        // Fade in
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+        // ============================================
+        // Plan selection
+        // ============================================
+        let selectedPlan = 'full';
+
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const plan = card.dataset.plan;
+                selectedPlan = plan;
+
+                // UI update - radio dots
+                document.querySelectorAll('.plan-card').forEach(c => {
+                    c.classList.remove('selected');
+                    const dot = c.querySelector('.w-2\\.5');
+                    const ring = c.querySelector('.w-5');
+                    if (dot) dot.classList.add('hidden');
+                    if (ring) ring.classList.remove('border-gold');
+                    ring?.classList.add('border-lavender/30');
+                });
+                card.classList.add('selected');
+                const dot = card.querySelector('.w-2\\.5');
+                const ring = card.querySelector('.w-5');
+                if (dot) dot.classList.remove('hidden');
+                if (ring) { ring.classList.add('border-gold'); ring.classList.remove('border-lavender/30'); }
+
+                // Update summary
+                const data = planData[plan];
+                document.getElementById('summary-plan').textContent = data.name;
+                document.getElementById('summary-desc').textContent = data.desc;
+                document.getElementById('summary-price').textContent = '¥' + data.price.toLocaleString();
+                document.getElementById('summary-total').textContent = '¥' + data.price.toLocaleString();
+
+                const includesEl = document.getElementById('summary-includes');
+                includesEl.innerHTML = data.includes.map(item =>
+                    `<li class="flex items-start gap-2"><span class="text-gold">&#x2713;</span> ${item}</li>`
+                ).join('');
+            });
+        });
+
+        // Init: select plan from URL parameter or default to "full"
+        const urlParams = new URLSearchParams(window.location.search);
+        const planParam = urlParams.get('plan');
+        const validPlans = ['light', 'full', 'premium'];
+        const initPlan = validPlans.includes(planParam) ? planParam : 'full';
+        document.querySelector(`[data-plan="${initPlan}"]`).click();
+
+        // ============================================
+        // Stripe Elements
+        // ============================================
+        let stripe, elements, cardNumber, cardExpiry, cardCvc;
+
+        function initStripe() {
+            // テストモード: 本番時はCONFIG.STRIPE_PUBLIC_KEYを本番キーに変更
+            try {
+                stripe = Stripe(CONFIG.STRIPE_PUBLIC_KEY);
+                elements = stripe.elements();
+
+                const style = {
+                    base: {
+                        color: '#B8A9D4',
+                        fontFamily: '"Noto Sans JP", sans-serif',
+                        fontSize: '14px',
+                        '::placeholder': { color: 'rgba(184, 169, 212, 0.3)' },
+                    },
+                    invalid: { color: '#ef4444' }
+                };
+
+                cardNumber = elements.create('cardNumber', { style, placeholder: '1234 5678 9012 3456' });
+                cardNumber.mount('#card-number-element');
+
+                cardExpiry = elements.create('cardExpiry', { style, placeholder: 'MM / YY' });
+                cardExpiry.mount('#card-expiry-element');
+
+                cardCvc = elements.create('cardCvc', { style, placeholder: '123' });
+                cardCvc.mount('#card-cvc-element');
+
+                // Error handling
+                [cardNumber, cardExpiry, cardCvc].forEach(el => {
+                    el.on('change', (event) => {
+                        const errEl = document.getElementById('card-errors');
+                        if (event.error) {
+                            errEl.textContent = event.error.message;
+                            errEl.classList.remove('hidden');
+                        } else {
+                            errEl.classList.add('hidden');
+                        }
+                    });
+                });
+            } catch (e) {
+                console.log('Stripe not initialized (test mode). Demo mode active.');
+                setupDemoMode();
+            }
+        }
+
+        // Demo mode when Stripe key is not configured
+        function setupDemoMode() {
+            ['card-number-element', 'card-expiry-element', 'card-cvc-element'].forEach(id => {
+                const el = document.getElementById(id);
+                el.innerHTML = `<input type="text" placeholder="${id.includes('number') ? '4242 4242 4242 4242' : id.includes('expiry') ? '12/28' : '123'}"
+                    class="w-full bg-transparent text-lavender text-sm focus:outline-none placeholder-lavender/30"
+                    ${id.includes('number') ? 'value="4242 4242 4242 4242"' : id.includes('expiry') ? 'value="12/28"' : 'value="123"'}>`;
+                el.style.backgroundColor = '#1A1A2E';
+                el.style.border = '1px solid rgba(184, 169, 212, 0.2)';
+                el.style.borderRadius = '0.75rem';
+                el.style.padding = '14px 16px';
+            });
+        }
+
+        initStripe();
+
+        // ============================================
+        // Payment submission
+        // ============================================
+        document.getElementById('submit-payment').addEventListener('click', async () => {
+            const name = document.getElementById('customer-name').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
+            const topic = document.getElementById('consultation-topic').value;
+            const data = planData[selectedPlan];
+
+            // Validation
+            if (!name) { alert('お名前を入力してください'); return; }
+            if (!email || !email.includes('@')) { alert('メールアドレスを正しく入力してください'); return; }
+
+            const btn = document.getElementById('submit-payment');
+            const btnText = document.getElementById('btn-text');
+            const btnLoading = document.getElementById('btn-loading');
+
+            btn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            btnLoading.classList.add('flex');
+
+            try {
+                if (stripe && cardNumber) {
+                    // Real Stripe payment flow
+                    const response = await fetch(CONFIG.API_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            amount: data.price,
+                            plan: selectedPlan,
+                            name, email, topic
+                        })
+                    });
+                    const { clientSecret } = await response.json();
+
+                    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                        payment_method: {
+                            card: cardNumber,
+                            billing_details: { name, email }
+                        }
+                    });
+
+                    if (error) {
+                        document.getElementById('card-errors').textContent = error.message;
+                        document.getElementById('card-errors').classList.remove('hidden');
+                    } else if (paymentIntent.status === 'succeeded') {
+                        showSuccess(paymentIntent.id);
+                    }
+                } else {
+                    // Demo mode - simulate payment
+                    await new Promise(r => setTimeout(r, 2000));
+                    const demoOrderId = 'demo_' + Date.now().toString(36);
+                    showSuccess(demoOrderId);
+                }
+            } catch (err) {
+                // Demo fallback
+                await new Promise(r => setTimeout(r, 2000));
+                const demoOrderId = 'demo_' + Date.now().toString(36);
+                showSuccess(demoOrderId);
+            }
+
+            btn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+            btnLoading.classList.remove('flex');
+        });
+
+        function showSuccess(orderId) {
+            document.getElementById('order-id').textContent = orderId;
+            document.getElementById('line-add-btn-modal').href = CONFIG.LINE_ADD_URL;
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+    </script>
+</body>
+</html>

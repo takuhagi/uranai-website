@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月詠みこ | タロット占い師 - あなたの魂が求める答えを導く</title>
+    <meta name="description" content="タロットと西洋占星術であなたの恋愛・仕事・人生の道を照らす。LINE登録で無料ミニ鑑定プレゼント中。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#2D1B69',
+                        'dark-bg': '#0D0B1A',
+                        'midnight': '#1A1A2E',
+                        'gold': '#C8A951',
+                        'gold-light': '#FFD700',
+                        'lavender': '#B8A9D4',
+                        'mystic': '#6B5B95',
+                    },
+                    fontFamily: {
+                        'serif-jp': ['"Noto Serif JP"', 'serif'],
+                        'sans-jp': ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .font-serif-jp { font-family: 'Noto Serif JP', serif; }
+
+        /* Starfield */
+        .stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Glow */
+        .glow-gold {
+            box-shadow: 0 0 30px rgba(200, 169, 81, 0.3), 0 0 60px rgba(200, 169, 81, 0.1);
+        }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(200, 169, 81, 0.5), 0 0 40px rgba(200, 169, 81, 0.2);
+        }
+
+        /* Moon glow */
+        .moon-glow {
+            background: radial-gradient(circle, rgba(200, 169, 81, 0.15) 0%, transparent 70%);
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            top: -200px; right: -100px;
+            z-index: 0;
+        }
+
+        /* Gradient divider */
+        .divider-gold {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #C8A951, transparent);
+        }
+
+        /* Card hover */
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(200, 169, 81, 0.15);
+        }
+
+        /* Fade in on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .float { animation: float 6s ease-in-out infinite; }
+
+        /* CTA pulse */
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(200, 169, 81, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(200, 169, 81, 0); }
+        }
+        .pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
+
+        /* Tarot card flip */
+        .tarot-card {
+            perspective: 1000px;
+        }
+        .tarot-inner {
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .tarot-card:hover .tarot-inner {
+            transform: rotateY(180deg);
+        }
+        .tarot-front, .tarot-back {
+            backface-visibility: hidden;
+        }
+        .tarot-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Scroll indicator */
+        @keyframes bounce-down {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white overflow-x-hidden">
+
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-gold/10">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="font-serif-jp text-gold text-xl tracking-wider">
+                月詠 みこ
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm text-lavender">
+                <a href="#about" class="hover:text-gold transition-colors">占い師について</a>
+                <a href="#services" class="hover:text-gold transition-colors">鑑定メニュー</a>
+                <a href="#testimonials" class="hover:text-gold transition-colors">お客様の声</a>
+                <a href="#faq" class="hover:text-gold transition-colors">よくある質問</a>
+                <a href="mini-reading.html" class="bg-gold/20 border border-gold/50 text-gold px-4 py-2 rounded-full hover:bg-gold/30 transition-all text-xs tracking-wider">
+                    無料鑑定を受ける
+                </a>
+            </div>
+            <button id="menu-toggle" class="md:hidden text-gold">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-midnight/95 backdrop-blur-md border-t border-gold/10">
+            <div class="px-4 py-6 flex flex-col gap-4 text-sm text-lavender">
+                <a href="#about" class="hover:text-gold transition-colors py-2">占い師について</a>
+                <a href="#services" class="hover:text-gold transition-colors py-2">鑑定メニュー</a>
+                <a href="#testimonials" class="hover:text-gold transition-colors py-2">お客様の声</a>
+                <a href="#faq" class="hover:text-gold transition-colors py-2">よくある質問</a>
+                <a href="mini-reading.html" class="bg-gold/20 border border-gold/50 text-gold px-4 py-3 rounded-full text-center hover:bg-gold/30 transition-all text-xs tracking-wider mt-2">
+                    無料鑑定を受ける
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <div class="moon-glow"></div>
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <!-- Moon Icon -->
+            <div class="float mb-8">
+                <div class="inline-block text-7xl md:text-8xl opacity-80">
+                    &#x1F319;
+                </div>
+            </div>
+
+            <p class="text-gold/80 text-sm tracking-[0.3em] uppercase mb-6 font-sans-jp">
+                Tarot & Astrology
+            </p>
+
+            <h1 class="font-serif-jp text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 glow-text">
+                <span class="text-gold">あなたの魂</span>が<br>
+                求める答えを、<br>
+                <span class="text-lavender">星とカード</span>が導く
+            </h1>
+
+            <p class="text-lavender/70 text-base md:text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                恋愛・仕事・人生の岐路で迷うあなたへ。<br>
+                タロットと西洋占星術が、見えない真実を照らし出します。
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="mini-reading.html" class="bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold px-8 py-4 rounded-full text-sm tracking-wider hover:scale-105 transition-transform pulse-gold">
+                    無料ミニ鑑定を試す
+                </a>
+                <a href="#services" class="border border-lavender/30 text-lavender px-8 py-4 rounded-full text-sm tracking-wider hover:border-gold/50 hover:text-gold transition-all">
+                    鑑定メニューを見る
+                </a>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="mt-20 text-lavender/40" style="animation: bounce-down 2s ease-in-out infinite;">
+                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- Stats Banner -->
+    <section class="py-16 px-4">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center fade-in">
+            <div>
+                <div class="text-3xl md:text-4xl font-serif-jp text-gold font-bold">3,000+</div>
+                <div class="text-lavender/60 text-sm mt-2">鑑定実績</div>
+            </div>
+            <div>
+                <div class="text-3xl md:text-4xl font-serif-jp text-gold font-bold">98%</div>
+                <div class="text-lavender/60 text-sm mt-2">満足度</div>
+            </div>
+            <div>
+                <div class="text-3xl md:text-4xl font-serif-jp text-gold font-bold">500+</div>
+                <div class="text-lavender/60 text-sm mt-2">LINE登録者</div>
+            </div>
+            <div>
+                <div class="text-3xl md:text-4xl font-serif-jp text-gold font-bold">24h</div>
+                <div class="text-lavender/60 text-sm mt-2">以内に鑑定結果</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-4">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="fade-in">
+                <!-- Profile Image Placeholder -->
+                <div class="relative">
+                    <div class="w-72 h-72 md:w-80 md:h-80 mx-auto rounded-full bg-gradient-to-br from-deep-purple to-midnight border-2 border-gold/30 flex items-center justify-center glow-gold">
+                        <span class="text-8xl">&#x1F52E;</span>
+                    </div>
+                    <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-midnight border border-gold/30 rounded-full px-6 py-2">
+                        <span class="text-gold text-sm font-serif-jp tracking-wider">タロット占い師</span>
+                    </div>
+                </div>
+            </div>
+            <div class="fade-in">
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">ABOUT</p>
+                <h2 class="font-serif-jp text-3xl md:text-4xl text-white mb-6">
+                    占い師 <span class="text-gold">月詠 みこ</span>
+                </h2>
+                <div class="space-y-4 text-lavender/70 leading-relaxed text-sm">
+                    <p>
+                        幼い頃から「見えない世界」に強い関心を持ち、大学時代に西洋占星術とタロットに出会う。独学で占術を習得した後、実践を重ね、これまでに3,000件以上の鑑定を行う。
+                    </p>
+                    <p>
+                        自身も恋愛で深く傷ついた経験があり、その時にタロットに救われたことが占い師としての原点。「占いは未来を当てるものではなく、今の自分を知り、より良い選択をするためのツール」という信念のもと活動。
+                    </p>
+                    <p>
+                        タロット（ウェイト版78枚）と西洋占星術を組み合わせた独自の鑑定スタイルで、特に恋愛・復縁・相性に関する鑑定を得意とする。
+                    </p>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <span class="border border-gold/30 text-gold/80 text-xs px-4 py-2 rounded-full">タロット</span>
+                    <span class="border border-gold/30 text-gold/80 text-xs px-4 py-2 rounded-full">西洋占星術</span>
+                    <span class="border border-gold/30 text-gold/80 text-xs px-4 py-2 rounded-full">恋愛専門</span>
+                    <span class="border border-gold/30 text-gold/80 text-xs px-4 py-2 rounded-full">復縁鑑定</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">MENU</p>
+                <h2 class="font-serif-jp text-3xl md:text-4xl text-white mb-4">鑑定メニュー</h2>
+                <p class="text-lavender/60 text-sm max-w-lg mx-auto">
+                    あなたのお悩みやご予算に合わせて、3つのプランをご用意しました。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Plan 1: Light -->
+                <div class="service-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 text-center fade-in">
+                    <div class="text-5xl mb-6">&#x2728;</div>
+                    <h3 class="font-serif-jp text-xl text-lavender mb-2">ワンカードリーディング</h3>
+                    <p class="text-gold/80 text-xs tracking-wider mb-4">LIGHT READING</p>
+                    <div class="my-6">
+                        <span class="text-4xl font-serif-jp text-white">1,500</span>
+                        <span class="text-lavender/60 text-sm">円（税込）</span>
+                    </div>
+                    <ul class="text-left text-sm text-lavender/60 space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>タロット1枚引きによるシンプルな鑑定</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>恋愛・仕事・総合運から1テーマ</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>鑑定結果：約500〜800文字</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>24時間以内にお届け</span>
+                        </li>
+                    </ul>
+                    <a href="payment.html?plan=light" class="block border border-gold/40 text-gold py-3 rounded-full text-sm hover:bg-gold/10 transition-colors">
+                        この鑑定を申し込む
+                    </a>
+                    <p class="text-lavender/40 text-xs mt-4">初めての方におすすめ</p>
+                </div>
+
+                <!-- Plan 2: Standard (Featured) -->
+                <div class="service-card bg-gradient-to-b from-deep-purple/40 to-midnight/60 border border-gold/30 rounded-2xl p-8 text-center relative fade-in glow-gold">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold text-dark-bg text-xs font-bold px-6 py-1.5 rounded-full tracking-wider">
+                        人気 No.1
+                    </div>
+                    <div class="text-5xl mb-6">&#x1F52E;</div>
+                    <h3 class="font-serif-jp text-xl text-white mb-2">フルリーディング</h3>
+                    <p class="text-gold/80 text-xs tracking-wider mb-4">FULL READING</p>
+                    <div class="my-6">
+                        <span class="text-4xl font-serif-jp text-gold">5,000</span>
+                        <span class="text-lavender/60 text-sm">円（税込）</span>
+                    </div>
+                    <ul class="text-left text-sm text-lavender/70 space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>タロット複数枚によるフルスプレッド</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>西洋占星術との組み合わせ鑑定</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>鑑定結果：約2,000〜3,000文字</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>具体的なアドバイス＆時期予測</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>1回の追加質問OK</span>
+                        </li>
+                    </ul>
+                    <a href="payment.html?plan=full" class="block bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold py-3 rounded-full text-sm hover:scale-105 transition-transform">
+                        この鑑定を申し込む
+                    </a>
+                    <p class="text-gold/60 text-xs mt-4">最も選ばれているプラン</p>
+                </div>
+
+                <!-- Plan 3: Premium -->
+                <div class="service-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 text-center fade-in">
+                    <div class="text-5xl mb-6">&#x1F31F;</div>
+                    <h3 class="font-serif-jp text-xl text-lavender mb-2">プレミアム鑑定</h3>
+                    <p class="text-gold/80 text-xs tracking-wider mb-4">PREMIUM READING</p>
+                    <div class="my-6">
+                        <span class="text-4xl font-serif-jp text-white">15,000</span>
+                        <span class="text-lavender/60 text-sm">円（税込）</span>
+                    </div>
+                    <ul class="text-left text-sm text-lavender/60 space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>フルリーディングの全内容</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>ホロスコープ詳細分析</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>鑑定結果：約5,000〜8,000文字</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>1年間の運勢カレンダー付き</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-0.5">&#x2713;</span>
+                            <span>30日間のアフターフォロー</span>
+                        </li>
+                    </ul>
+                    <a href="payment.html?plan=premium" class="block border border-gold/40 text-gold py-3 rounded-full text-sm hover:bg-gold/10 transition-colors">
+                        この鑑定を申し込む
+                    </a>
+                    <p class="text-lavender/40 text-xs mt-4">本気で人生を変えたい方へ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- Process Section -->
+    <section class="py-24 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">FLOW</p>
+                <h2 class="font-serif-jp text-3xl md:text-4xl text-white mb-4">鑑定の流れ</h2>
+            </div>
+
+            <div class="space-y-8">
+                <div class="flex items-start gap-6 fade-in">
+                    <div class="flex-shrink-0 w-12 h-12 bg-deep-purple/60 border border-gold/30 rounded-full flex items-center justify-center">
+                        <span class="text-gold font-serif-jp text-lg">1</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-medium mb-1">LINE公式アカウントに登録</h3>
+                        <p class="text-lavender/60 text-sm">まずはLINEで友だち追加。登録すると無料ミニ鑑定をプレゼント。</p>
+                    </div>
+                </div>
+
+                <div class="ml-6 border-l border-gold/20 h-8"></div>
+
+                <div class="flex items-start gap-6 fade-in">
+                    <div class="flex-shrink-0 w-12 h-12 bg-deep-purple/60 border border-gold/30 rounded-full flex items-center justify-center">
+                        <span class="text-gold font-serif-jp text-lg">2</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-medium mb-1">鑑定メニューを選択</h3>
+                        <p class="text-lavender/60 text-sm">お悩みやご予算に合わせてメニューをお選びください。ご相談も歓迎です。</p>
+                    </div>
+                </div>
+
+                <div class="ml-6 border-l border-gold/20 h-8"></div>
+
+                <div class="flex items-start gap-6 fade-in">
+                    <div class="flex-shrink-0 w-12 h-12 bg-deep-purple/60 border border-gold/30 rounded-full flex items-center justify-center">
+                        <span class="text-gold font-serif-jp text-lg">3</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-medium mb-1">お悩み・生年月日をお伝え</h3>
+                        <p class="text-lavender/60 text-sm">LINEでお悩みの内容と生年月日をお送りください。秘密は厳守します。</p>
+                    </div>
+                </div>
+
+                <div class="ml-6 border-l border-gold/20 h-8"></div>
+
+                <div class="flex items-start gap-6 fade-in">
+                    <div class="flex-shrink-0 w-12 h-12 bg-deep-purple/60 border border-gold/30 rounded-full flex items-center justify-center">
+                        <span class="text-gold font-serif-jp text-lg">4</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-medium mb-1">鑑定結果をお届け</h3>
+                        <p class="text-lavender/60 text-sm">24時間以内に丁寧な鑑定結果をLINEでお届けします。追加質問もお気軽に。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">VOICE</p>
+                <h2 class="font-serif-jp text-3xl md:text-4xl text-white mb-4">お客様の声</h2>
+                <p class="text-lavender/60 text-sm max-w-lg mx-auto">
+                    鑑定を受けてくださった方々からいただいた感想をご紹介します。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-midnight/60 border border-lavender/10 rounded-2xl p-8 fade-in">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    </div>
+                    <p class="text-lavender/70 text-sm leading-relaxed mb-6">
+                        「片思い中の彼のことを鑑定してもらいました。"3月に大きな転機がある"と言われ、本当にその月に告白されました...！みこさんの鑑定、本当に当たります。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-deep-purple/60 rounded-full flex items-center justify-center text-gold text-sm">
+                            M
+                        </div>
+                        <div>
+                            <p class="text-white text-sm">M.S さん</p>
+                            <p class="text-lavender/40 text-xs">25歳・恋愛鑑定</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-midnight/60 border border-lavender/10 rounded-2xl p-8 fade-in">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    </div>
+                    <p class="text-lavender/70 text-sm leading-relaxed mb-6">
+                        「元カレとの復縁を諦めかけていたとき、みこさんの鑑定を受けました。具体的なアドバイスが的確で、その通りにしたら本当に連絡が来ました。感謝しかありません。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-deep-purple/60 rounded-full flex items-center justify-center text-gold text-sm">
+                            A
+                        </div>
+                        <div>
+                            <p class="text-white text-sm">A.K さん</p>
+                            <p class="text-lavender/40 text-xs">28歳・復縁鑑定</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-midnight/60 border border-lavender/10 rounded-2xl p-8 fade-in">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    </div>
+                    <p class="text-lavender/70 text-sm leading-relaxed mb-6">
+                        「転職を迷っていた時に鑑定をお願いしました。"今は動く時期ではない"と言われ、半年待ったところ、想像以上の好条件のオファーが来ました。信じて良かった。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-deep-purple/60 rounded-full flex items-center justify-center text-gold text-sm">
+                            T
+                        </div>
+                        <div>
+                            <p class="text-white text-sm">T.H さん</p>
+                            <p class="text-lavender/40 text-xs">33歳・仕事運鑑定</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 px-4">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">FAQ</p>
+                <h2 class="font-serif-jp text-3xl md:text-4xl text-white mb-4">よくある質問</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="faq-item border border-lavender/10 rounded-xl overflow-hidden fade-in">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex justify-between items-center hover:bg-midnight/40 transition-colors">
+                        <span class="text-white text-sm">占いを受けるのが初めてですが大丈夫ですか？</span>
+                        <svg class="w-5 h-5 text-gold transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5">
+                        <p class="text-lavender/60 text-sm leading-relaxed">
+                            もちろん大丈夫です。初めての方にも分かりやすいよう、丁寧に鑑定結果をお伝えしています。専門用語の説明も付けますのでご安心ください。まずはワンカードリーディング（1,500円）からお試しいただくのがおすすめです。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item border border-lavender/10 rounded-xl overflow-hidden fade-in">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex justify-between items-center hover:bg-midnight/40 transition-colors">
+                        <span class="text-white text-sm">鑑定結果はどのくらいで届きますか？</span>
+                        <svg class="w-5 h-5 text-gold transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5">
+                        <p class="text-lavender/60 text-sm leading-relaxed">
+                            お申し込みから24時間以内にLINEでお届けします。混雑時は48時間ほどいただく場合がありますが、その際は事前にご連絡いたします。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item border border-lavender/10 rounded-xl overflow-hidden fade-in">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex justify-between items-center hover:bg-midnight/40 transition-colors">
+                        <span class="text-white text-sm">個人情報は安全に管理されますか？</span>
+                        <svg class="w-5 h-5 text-gold transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5">
+                        <p class="text-lavender/60 text-sm leading-relaxed">
+                            お預かりした個人情報（お名前・生年月日・ご相談内容）は鑑定以外の目的では一切使用しません。第三者への開示もいたしません。プライバシーの保護を最優先としています。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item border border-lavender/10 rounded-xl overflow-hidden fade-in">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex justify-between items-center hover:bg-midnight/40 transition-colors">
+                        <span class="text-white text-sm">支払い方法は何がありますか？</span>
+                        <svg class="w-5 h-5 text-gold transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5">
+                        <p class="text-lavender/60 text-sm leading-relaxed">
+                            クレジットカード（Visa / Mastercard / AMEX）、銀行振込、PayPayに対応しています。LINE上でスムーズにお手続きいただけます。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item border border-lavender/10 rounded-xl overflow-hidden fade-in">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex justify-between items-center hover:bg-midnight/40 transition-colors">
+                        <span class="text-white text-sm">鑑定結果に満足できなかった場合はどうなりますか？</span>
+                        <svg class="w-5 h-5 text-gold transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5">
+                        <p class="text-lavender/60 text-sm leading-relaxed">
+                            鑑定結果にご不明な点があれば、追加でご質問いただけます（メニューにより回数は異なります）。万が一ご満足いただけなかった場合は、お気軽にLINEでお知らせください。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-gold max-w-md mx-auto"></div>
+
+    <!-- CTA Section -->
+    <section id="cta" class="py-24 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-deep-purple/20 to-dark-bg"></div>
+        <div class="moon-glow" style="top: -300px; left: 50%; transform: translateX(-50%);"></div>
+
+        <div class="relative z-10 max-w-2xl mx-auto text-center fade-in">
+            <div class="text-6xl mb-8 float">&#x1F319;</div>
+
+            <h2 class="font-serif-jp text-3xl md:text-4xl text-white mb-6">
+                <span class="text-gold">LINE登録</span>で<br>
+                無料ミニ鑑定プレゼント
+            </h2>
+
+            <p class="text-lavender/60 text-sm leading-relaxed mb-8 max-w-md mx-auto">
+                今すぐLINEに登録すると、あなたの生年月日から導く<br>
+                <span class="text-gold">「今月の運勢ミニ鑑定」</span>を無料でお届けします。
+            </p>
+
+            <div class="bg-midnight/80 border border-gold/20 rounded-2xl p-8 mb-8">
+                <h3 class="text-white text-sm font-medium mb-4">LINE登録特典</h3>
+                <ul class="text-left text-sm text-lavender/70 space-y-3 max-w-sm mx-auto">
+                    <li class="flex items-start gap-3">
+                        <span class="text-gold text-lg">&#x1F381;</span>
+                        <a href="mini-reading.html" class="hover:text-gold transition-colors underline underline-offset-2 decoration-gold/30">無料ミニ鑑定（生年月日で診断）</a>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-gold text-lg">&#x1F4D6;</span>
+                        <a href="love-habits.html" class="hover:text-gold transition-colors underline underline-offset-2 decoration-gold/30">「恋愛運を上げる7つの習慣」PDF</a>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-gold text-lg">&#x1F319;</span>
+                        <span>毎月の満月・新月メッセージ配信</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-gold text-lg">&#x1F48E;</span>
+                        <span>LINE限定の特別鑑定キャンペーン</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#" id="line-cta-btn" class="inline-flex items-center gap-3 bg-[#06C755] hover:bg-[#05B04C] text-white font-bold px-10 py-5 rounded-full text-base transition-all hover:scale-105 shadow-lg shadow-[#06C755]/30">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </svg>
+                    LINE友だち追加
+                </a>
+                <a href="payment.html" class="inline-flex items-center gap-3 bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold px-10 py-5 rounded-full text-base transition-all hover:scale-105">
+                    鑑定を申し込む
+                </a>
+            </div>
+
+            <p class="text-lavender/40 text-xs mt-6">
+                ※ 登録後すぐに無料鑑定をお届けします<br>
+                ※ いつでもブロック可能です
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gold/10 py-12 px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="font-serif-jp text-gold text-lg mb-4">月詠 みこ</h3>
+                    <p class="text-lavender/50 text-xs leading-relaxed">
+                        タロットと西洋占星術であなたの人生を照らす占い師。恋愛・復縁・相性鑑定を得意とし、これまでに3,000件以上の鑑定実績。
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white text-sm font-medium mb-4">メニュー</h4>
+                    <ul class="space-y-2 text-lavender/50 text-xs">
+                        <li><a href="#about" class="hover:text-gold transition-colors">占い師について</a></li>
+                        <li><a href="#services" class="hover:text-gold transition-colors">鑑定メニュー</a></li>
+                        <li><a href="payment.html" class="hover:text-gold transition-colors">鑑定のお申し込み</a></li>
+                        <li><a href="mini-reading.html" class="hover:text-gold transition-colors">無料ミニ鑑定</a></li>
+                        <li><a href="love-habits.html" class="hover:text-gold transition-colors">恋愛運UP 7つの習慣</a></li>
+                        <li><a href="#testimonials" class="hover:text-gold transition-colors">お客様の声</a></li>
+                        <li><a href="#faq" class="hover:text-gold transition-colors">よくある質問</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white text-sm font-medium mb-4">SNS</h4>
+                    <ul class="space-y-2 text-lavender/50 text-xs">
+                        <li><a href="#" class="hover:text-gold transition-colors">TikTok</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors">Instagram</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors">LINE公式アカウント</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="divider-gold mb-8"></div>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-lavender/30 text-xs">
+                <p>&copy; 2026 月詠みこ All Rights Reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-gold transition-colors">プライバシーポリシー</a>
+                    <a href="#" class="hover:text-gold transition-colors">特定商取引法に基づく表記</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Fade in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('.faq-icon');
+                const isOpen = !content.classList.contains('hidden');
+
+                // Close all
+                document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+                document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+
+                // Toggle current
+                if (!isOpen) {
+                    content.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // Mobile menu
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-dark-bg/95');
+                nav.classList.remove('bg-dark-bg/80');
+            } else {
+                nav.classList.add('bg-dark-bg/80');
+                nav.classList.remove('bg-dark-bg/95');
+            }
+        });
+    </script>
+</body>
+</html>

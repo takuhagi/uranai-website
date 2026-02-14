@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恋愛運を上げる7つの習慣 | 月詠みこ タロット占い</title>
+    <meta name="description" content="タロット占い師・月詠みこが3,000件以上の鑑定から導いた、恋愛運を劇的に上げる7つの習慣をお教えします。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#2D1B69',
+                        'dark-bg': '#0D0B1A',
+                        'midnight': '#1A1A2E',
+                        'gold': '#C8A951',
+                        'gold-light': '#FFD700',
+                        'lavender': '#B8A9D4',
+                        'mystic': '#6B5B95',
+                    },
+                    fontFamily: {
+                        'serif-jp': ['"Noto Serif JP"', 'serif'],
+                        'sans-jp': ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .font-serif-jp { font-family: 'Noto Serif JP', serif; }
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        .divider-gold { height: 1px; background: linear-gradient(90deg, transparent, #C8A951, transparent); }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .habit-card { transition: transform 0.3s ease; }
+        .habit-card:hover { transform: translateY(-4px); }
+        .quote-box { border-left: 3px solid #C8A951; background: rgba(45, 27, 105, 0.3); }
+        @media print {
+            .stars, nav, .no-print { display: none !important; }
+            body { background: white; color: #333; }
+            .print-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white overflow-x-hidden">
+    <div class="stars" id="stars"></div>
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-gold/10 no-print">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-serif-jp text-gold text-xl tracking-wider">月詠 みこ</a>
+            <div class="flex items-center gap-4 text-sm text-lavender">
+                <a href="index.html" class="hover:text-gold transition-colors hidden md:inline">トップに戻る</a>
+                <button onclick="window.print()" class="border border-gold/30 text-gold px-4 py-1.5 rounded-full text-xs hover:bg-gold/10 transition-colors">
+                    PDFに保存
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Desktop Sidebar Navigation -->
+    <div class="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden xl:block no-print">
+        <div class="bg-midnight/80 backdrop-blur-md border border-gold/10 rounded-2xl p-3 space-y-2">
+            <a href="#habit-1" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-gold/30 flex items-center justify-center text-gold text-xs hover:bg-gold/20 transition-colors">1</a>
+            <a href="#habit-2" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-lavender/20 flex items-center justify-center text-lavender/60 text-xs hover:bg-gold/20 hover:text-gold transition-colors">2</a>
+            <a href="#habit-3" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-lavender/20 flex items-center justify-center text-lavender/60 text-xs hover:bg-gold/20 hover:text-gold transition-colors">3</a>
+            <a href="#habit-4" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-lavender/20 flex items-center justify-center text-lavender/60 text-xs hover:bg-gold/20 hover:text-gold transition-colors">4</a>
+            <a href="#habit-5" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-lavender/20 flex items-center justify-center text-lavender/60 text-xs hover:bg-gold/20 hover:text-gold transition-colors">5</a>
+            <a href="#habit-6" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-lavender/20 flex items-center justify-center text-lavender/60 text-xs hover:bg-gold/20 hover:text-gold transition-colors">6</a>
+            <a href="#habit-7" class="block w-8 h-8 rounded-full bg-deep-purple/60 border border-lavender/20 flex items-center justify-center text-lavender/60 text-xs hover:bg-gold/20 hover:text-gold transition-colors">7</a>
+        </div>
+    </div>
+
+    <main class="relative z-10 pt-28 pb-20 px-4">
+        <div class="max-w-3xl mx-auto">
+
+            <!-- Hero -->
+            <div class="text-center mb-16 fade-in">
+                <span class="text-6xl mb-6 block">💕</span>
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">SPECIAL GUIDE</p>
+                <h1 class="font-serif-jp text-3xl md:text-5xl text-white mb-4 leading-tight">
+                    恋愛運を上げる<br><span class="text-gold">7つの習慣</span>
+                </h1>
+                <p class="text-lavender/60 text-sm md:text-base leading-relaxed max-w-lg mx-auto">
+                    〜タロット占い師が教える、愛される自分になるためのガイド〜
+                </p>
+                <div class="mt-6 inline-flex items-center gap-3 text-lavender/40 text-xs">
+                    <span>著: 月詠みこ</span>
+                    <span>|</span>
+                    <span>鑑定実績 3,000件+</span>
+                </div>
+            </div>
+
+            <div class="divider-gold max-w-xs mx-auto mb-16"></div>
+
+            <!-- Introduction -->
+            <div class="mb-16 fade-in">
+                <p class="text-lavender/70 text-sm leading-loose">
+                    これまで3,000件以上の恋愛鑑定を行ってきた中で、恋愛がうまくいく人に共通する「習慣」があることに気づきました。タロットカードや星の配置が伝えてくれるメッセージを日常に取り入れることで、あなたの恋愛エネルギーは確実に変わります。
+                </p>
+                <p class="text-lavender/70 text-sm leading-loose mt-4">
+                    この7つの習慣は、占いの叡智と心理学、そして多くのクライアントの実体験から導き出したものです。すべてを一度に始める必要はありません。ひとつずつ、自分のペースで取り入れてみてください。
+                </p>
+            </div>
+
+            <!-- Habit 1 -->
+            <section id="habit-1" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-gold/20 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">1</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">🌑</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">新月の日に恋愛の意図を宣言する</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        新月は「始まり」のエネルギーが最も強い日。月が完全に姿を隠すこの日は、新しい種を蒔くのに最適なタイミングです。タロットでは「愚者」のカードが新しい旅立ちを象徴するように、新月もまた、まっさらな状態から何かを始める力を持っています。
+                    </p>
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        毎月の新月の日に、恋愛に関する「意図」をノートに書き出しましょう。大切なのは、「〜がほしい」ではなく「私は〜している」という現在形で書くこと。例えば「心から信頼できるパートナーと穏やかな毎日を過ごしている」というように。
+                    </p>
+
+                    <div class="quote-box rounded-xl p-5 mb-4">
+                        <p class="text-gold/80 text-sm italic">
+                            「新月に書いた願い事を2ヶ月続けたところ、理想通りの人と出会いました」— 鑑定を受けた28歳女性
+                        </p>
+                    </div>
+
+                    <p class="text-lavender/50 text-xs">
+                        <strong class="text-gold/70">実践ポイント:</strong> 新月の日は毎月変わります。スマートフォンのカレンダーアプリで「新月」を検索してリマインダーを設定しましょう。書く時間帯は、新月の瞬間から48時間以内が最も効果的です。
+                    </p>
+                </div>
+            </section>
+
+            <!-- Habit 2 -->
+            <section id="habit-2" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">2</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">💖</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">毎朝鏡の前で自分を褒める</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        タロットカードの「女帝（The Empress）」は、自己愛と豊かさの象徴です。この女帝のエネルギーを日常に取り入れる最も簡単な方法が、毎朝の「セルフラブ」の習慣。鏡の前で自分に向かって「今日も素敵だよ」「あなたは愛される価値がある」と声に出して伝えましょう。
+                    </p>
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        恋愛鑑定をしていて気づくのは、「自分を好きになれない人」は、いい恋愛もなかなかうまくいかないということ。自分を愛するエネルギーが高まると、それに共鳴する人が自然と引き寄せられます。
+                    </p>
+
+                    <div class="bg-deep-purple/30 rounded-xl p-5 mb-4">
+                        <p class="text-lavender/60 text-xs font-medium mb-3">おすすめアファメーション:</p>
+                        <ul class="text-lavender/70 text-sm space-y-2">
+                            <li>「私は愛される価値のある、素晴らしい存在です」</li>
+                            <li>「私は自分のペースで、最高の恋愛を引き寄せています」</li>
+                            <li>「私の魅力は日に日に増しています」</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-lavender/50 text-xs">
+                        <strong class="text-gold/70">タロットカードの教え:</strong> 女帝は「自分を満たすことで、周りも豊かにする」ことを教えてくれます。まず自分のカップを満たしましょう。
+                    </p>
+                </div>
+            </section>
+
+            <!-- Habit 3 -->
+            <section id="habit-3" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">3</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">🎀</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">ピンクとゴールドを身に着ける</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        色にはそれぞれ固有のエネルギーがあります。恋愛運に最も強く影響する色は「ピンク」と「ゴールド」。ピンクは無条件の愛と優しさのエネルギーを持ち、ハートチャクラを活性化させます。ゴールドは自信と豊かさの象徴で、あなたの存在感を高めてくれます。
+                    </p>
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        全身をピンクにする必要はありません。ネイルの色、ハンカチ、スマホケース、リップの色など、小さなアイテムから取り入れてみましょう。ゴールドのアクセサリーも効果的です。
+                    </p>
+
+                    <div class="quote-box rounded-xl p-5 mb-4">
+                        <p class="text-gold/80 text-sm italic">
+                            「ピンクのネイルに変えてから、不思議と声をかけられることが増えました」— 鑑定を受けた25歳女性
+                        </p>
+                    </div>
+
+                    <div class="bg-deep-purple/30 rounded-xl p-5">
+                        <p class="text-lavender/60 text-xs font-medium mb-3">恋愛運UPラッキーアイテム:</p>
+                        <div class="grid grid-cols-2 gap-2 text-lavender/70 text-sm">
+                            <span>🩷 ローズクォーツ</span>
+                            <span>✨ ゴールドリング</span>
+                            <span>🌹 バラの香り</span>
+                            <span>💄 ピンクリップ</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Habit 4 -->
+            <section id="habit-4" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">4</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">📖</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">感謝日記を毎晩つける</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        感謝のエネルギーは、ハートチャクラ（第4チャクラ）を開く最も強力な鍵です。ハートチャクラが開いている人は、自然と愛のエネルギーを放射し、良い出会いを引き寄せます。毎晩寝る前に、その日あった「感謝できること」を3つ書き出す習慣を始めましょう。
+                    </p>
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        小さなことでOKです。「今日のコーヒーが美味しかった」「友人からLINEが来て嬉しかった」「空がきれいだった」。こうした小さな感謝を積み重ねることで、あなたの波動は確実に高まります。
+                    </p>
+
+                    <div class="bg-deep-purple/30 rounded-xl p-5 mb-4">
+                        <p class="text-lavender/60 text-xs font-medium mb-3">感謝日記テンプレート:</p>
+                        <div class="bg-midnight/80 rounded-lg p-4 text-lavender/60 text-sm space-y-2">
+                            <p>📅 日付: ___月___日</p>
+                            <p>1. 今日感謝すること: _____________</p>
+                            <p>2. 今日嬉しかったこと: _____________</p>
+                            <p>3. 今日の自分を褒めること: _____________</p>
+                            <p>🌙 明日への願い: _____________</p>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/50 text-xs">
+                        <strong class="text-gold/70">鑑定からの気づき:</strong> 感謝日記を3週間続けたクライアントの多くが「不思議と良いことが起き始めた」と報告しています。
+                    </p>
+                </div>
+            </section>
+
+            <!-- Habit 5 -->
+            <section id="habit-5" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">5</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">🌕</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">満月の夜に手放しの儀式をする</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        新月が「始まり」なら、満月は「完成と手放し」のエネルギー。過去の恋愛の傷、元カレへの未練、「どうせ私なんて」という思い込み。これらをいつまでも抱えていると、新しい恋愛が入ってくるスペースがありません。
+                    </p>
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        満月の夜にシンプルな儀式を行いましょう。手放したいものを紙に書き、それを安全な場所で燃やすか（火の取り扱いに注意）、細かく破いて捨てます。これは単なるおまじないではなく、「自分の意志で手放す」という行為を通じて、潜在意識にメッセージを送るワークです。
+                    </p>
+
+                    <div class="bg-deep-purple/30 rounded-xl p-5 mb-4">
+                        <p class="text-lavender/60 text-xs font-medium mb-3">満月の手放しワーク手順:</p>
+                        <ol class="text-lavender/70 text-sm space-y-2 list-decimal list-inside">
+                            <li>静かな場所で深呼吸を3回</li>
+                            <li>手放したいことを紙に書く</li>
+                            <li>「ありがとう、もう大丈夫」と声に出す</li>
+                            <li>紙を破いて、感謝とともに手放す</li>
+                            <li>月の光を浴びながら、新しい自分をイメージ</li>
+                        </ol>
+                    </div>
+
+                    <div class="quote-box rounded-xl p-5">
+                        <p class="text-gold/80 text-sm italic">
+                            「3年間引きずっていた元カレへの未練を、満月の日に手放しました。翌月から気持ちが驚くほど軽くなり、新しい出会いがありました」— 鑑定を受けた31歳女性
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Habit 6 -->
+            <section id="habit-6" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">6</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">⛩️</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">恋愛のパワースポットを訪れる</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        日本には恋愛運を高める強力なパワースポットが数多くあります。神社やお寺のエネルギーは、あなたの恋愛運を浄化し、高めてくれます。大切なのは「お願い」ではなく「感謝」の気持ちで参拝すること。
+                    </p>
+
+                    <div class="space-y-3 mb-4">
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <h4 class="text-gold text-sm font-medium mb-1">東京大神宮（東京・飯田橋）</h4>
+                            <p class="text-lavender/60 text-xs">「東京のお伊勢さま」と呼ばれる縁結びの聖地。恋愛成就のお守りが大人気。</p>
+                        </div>
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <h4 class="text-gold text-sm font-medium mb-1">出雲大社（島根県）</h4>
+                            <p class="text-lavender/60 text-xs">日本最強の縁結び神社。大国主大神が良縁を結んでくださいます。</p>
+                        </div>
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <h4 class="text-gold text-sm font-medium mb-1">貴船神社（京都）</h4>
+                            <p class="text-lavender/60 text-xs">水の神様を祀る美しい神社。「結び文」で縁結びを祈願できます。</p>
+                        </div>
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <h4 class="text-gold text-sm font-medium mb-1">江島神社（神奈川・江ノ島）</h4>
+                            <p class="text-lavender/60 text-xs">弁財天を祀る美と恋愛の聖地。ピンクの「むすびの樹」が人気。</p>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/50 text-xs">
+                        <strong class="text-gold/70">占星術的ベストタイミング:</strong> 金星が自分の星座に入る時期がパワースポット訪問に最適です。詳しくは本格鑑定でお伝えします。
+                    </p>
+                </div>
+            </section>
+
+            <!-- Habit 7 -->
+            <section id="habit-7" class="mb-16 fade-in">
+                <div class="habit-card bg-midnight/60 border border-gold/20 rounded-2xl p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-gold/20 border border-gold/40 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-serif-jp text-lg">7</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl mr-2">🔮</span>
+                            <h2 class="font-serif-jp text-xl md:text-2xl text-white inline">自分の「恋愛パターン」を知る</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        多くの人が気づかないうちに、恋愛で同じパターンを繰り返しています。「いつも追いかける恋ばかり」「尽くしすぎて重いと言われる」「好きになった人にはいつも恋人がいる」。これらは偶然ではなく、あなたの潜在意識が作り出すパターンです。
+                    </p>
+                    <p class="text-lavender/70 text-sm leading-loose mb-4">
+                        タロットカードは、あなた自身も気づいていない深層心理を映し出す鏡。プロの鑑定を受けることで、自分の恋愛パターンを客観的に理解し、ネガティブなサイクルを断ち切るきっかけを掴めます。
+                    </p>
+
+                    <div class="bg-deep-purple/30 rounded-xl p-5 mb-4">
+                        <p class="text-lavender/60 text-xs font-medium mb-3">よくある恋愛パターン:</p>
+                        <ul class="text-lavender/70 text-sm space-y-2">
+                            <li>🔄 <strong>追いかけ型:</strong> いつも自分から好きになり、追いかける恋愛ばかり</li>
+                            <li>🔄 <strong>尽くし型:</strong> 相手に尽くしすぎて、自分を見失ってしまう</li>
+                            <li>🔄 <strong>回避型:</strong> 本気で好きになることを無意識に避けている</li>
+                            <li>🔄 <strong>理想化型:</strong> 最初は理想的に見えるが、すぐに幻滅してしまう</li>
+                        </ul>
+                    </div>
+
+                    <div class="quote-box rounded-xl p-5">
+                        <p class="text-gold/80 text-sm italic">
+                            「自分が"追いかけ型"だと鑑定で指摘されてハッとしました。意識を変えたら、初めて追いかけてもらえる恋愛ができました」— 鑑定を受けた26歳女性
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider-gold max-w-xs mx-auto mb-16"></div>
+
+            <!-- Closing CTA -->
+            <section class="text-center fade-in">
+                <div class="bg-gradient-to-b from-deep-purple/30 to-midnight/60 border border-gold/20 rounded-2xl p-8 md:p-12">
+                    <span class="text-5xl mb-6 block">🌙</span>
+                    <h2 class="font-serif-jp text-2xl md:text-3xl text-white mb-4">
+                        7つの習慣を始めて<br><span class="text-gold">もっと深い鑑定</span>を受けてみませんか？
+                    </h2>
+                    <p class="text-lavender/60 text-sm leading-relaxed mb-8 max-w-md mx-auto">
+                        このガイドでご紹介した習慣は、あなたの恋愛運を高める第一歩です。<br>
+                        タロットと西洋占星術を組み合わせた本格鑑定で、<br>
+                        あなただけの恋愛の道筋を、さらに深く読み解きます。
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center no-print">
+                        <a href="#" id="line-btn" class="inline-flex items-center justify-center gap-2 bg-[#06C755] hover:bg-[#05B04C] text-white font-bold px-8 py-4 rounded-full text-sm transition-all hover:scale-105">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                            </svg>
+                            LINE友だち追加
+                        </a>
+                        <a href="payment.html" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold px-8 py-4 rounded-full text-sm transition-all hover:scale-105">
+                            有料鑑定を申し込む
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Author -->
+            <section class="mt-16 fade-in">
+                <div class="flex items-center gap-6 bg-midnight/40 rounded-2xl p-6">
+                    <div class="w-20 h-20 bg-deep-purple/60 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-3xl">🔮</span>
+                    </div>
+                    <div>
+                        <p class="text-gold text-sm font-medium font-serif-jp">著者: 月詠 みこ</p>
+                        <p class="text-lavender/60 text-xs leading-relaxed mt-1">
+                            タロットと西洋占星術を組み合わせた独自の鑑定スタイルで、3,000件以上の鑑定実績。恋愛・復縁・相性鑑定を得意とし、「占いは自分を知るためのツール」という信念のもと活動中。
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="relative z-10 border-t border-gold/10 py-8 px-4">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-lavender/30 text-xs">
+            <p>&copy; 2026 月詠みこ All Rights Reserved.</p>
+            <div class="flex gap-6">
+                <a href="index.html" class="hover:text-gold transition-colors">トップページ</a>
+                <a href="mini-reading.html" class="hover:text-gold transition-colors">無料ミニ鑑定</a>
+                <a href="payment.html" class="hover:text-gold transition-colors">鑑定のお申し込み</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Stars
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const s = document.createElement('div'); s.className = 'star';
+            const sz = Math.random() * 2 + 1;
+            s.style.width = sz+'px'; s.style.height = sz+'px';
+            s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+            s.style.setProperty('--duration', (Math.random()*3+2)+'s');
+            s.style.animationDelay = Math.random()*5+'s';
+            starsEl.appendChild(s);
+        }
+
+        // Fade in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

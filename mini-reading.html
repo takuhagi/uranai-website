@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>無料ミニ鑑定 | 月詠みこ タロット占い</title>
+    <meta name="description" content="生年月日であなたの運勢を無料鑑定。星座・運命数・今日のラッキーアイテムをお届けします。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#2D1B69',
+                        'dark-bg': '#0D0B1A',
+                        'midnight': '#1A1A2E',
+                        'gold': '#C8A951',
+                        'gold-light': '#FFD700',
+                        'lavender': '#B8A9D4',
+                        'mystic': '#6B5B95',
+                    },
+                    fontFamily: {
+                        'serif-jp': ['"Noto Serif JP"', 'serif'],
+                        'sans-jp': ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .font-serif-jp { font-family: 'Noto Serif JP', serif; }
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        .glow-gold { box-shadow: 0 0 30px rgba(200, 169, 81, 0.3), 0 0 60px rgba(200, 169, 81, 0.1); }
+        .glow-text { text-shadow: 0 0 20px rgba(200, 169, 81, 0.5); }
+        .divider-gold { height: 1px; background: linear-gradient(90deg, transparent, #C8A951, transparent); }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .float { animation: float 6s ease-in-out infinite; }
+        @keyframes spin-crystal { 0% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(90deg) scale(1.1); } 50% { transform: rotate(180deg) scale(1); } 75% { transform: rotate(270deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
+        .spin-crystal { animation: spin-crystal 3s ease-in-out infinite; }
+        @keyframes pulse-glow { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-up { animation: slide-up 0.8s ease-out forwards; }
+        .slide-up-delay-1 { animation-delay: 0.2s; opacity: 0; }
+        .slide-up-delay-2 { animation-delay: 0.4s; opacity: 0; }
+        .slide-up-delay-3 { animation-delay: 0.6s; opacity: 0; }
+        .slide-up-delay-4 { animation-delay: 0.8s; opacity: 0; }
+        .result-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .result-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(200, 169, 81, 0.15); }
+        .fortune-bar { height: 6px; border-radius: 3px; background: rgba(184, 169, 212, 0.2); overflow: hidden; }
+        .fortune-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #C8A951, #FFD700); transition: width 1.5s ease-out; }
+    </style>
+</head>
+<body class="bg-dark-bg text-white overflow-x-hidden">
+    <div class="stars" id="stars"></div>
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-gold/10">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-serif-jp text-gold text-xl tracking-wider">月詠 みこ</a>
+            <div class="flex items-center gap-6 text-sm text-lavender">
+                <a href="index.html" class="hover:text-gold transition-colors">トップに戻る</a>
+                <a href="payment.html" class="hover:text-gold transition-colors hidden md:inline">鑑定を申し込む</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-28 pb-20 px-4">
+        <div class="max-w-2xl mx-auto">
+
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <div class="float mb-6">
+                    <span class="text-6xl">🔮</span>
+                </div>
+                <p class="text-gold/80 text-sm tracking-[0.2em] mb-4">FREE MINI READING</p>
+                <h1 class="font-serif-jp text-3xl md:text-4xl text-white mb-4 glow-text">
+                    無料ミニ鑑定
+                </h1>
+                <p class="text-lavender/60 text-sm max-w-md mx-auto leading-relaxed">
+                    あなたの生年月日から、星座と運命数を読み解き、<br>
+                    今日の運勢をお届けします。
+                </p>
+            </div>
+
+            <!-- Input Form -->
+            <div id="input-section" class="bg-midnight/60 border border-gold/20 rounded-2xl p-8 mb-8 glow-gold">
+                <h2 class="text-white text-sm font-medium mb-6 text-center">生年月日を入力してください</h2>
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="text-lavender/60 text-xs mb-1 block">年</label>
+                        <select id="birth-year" class="w-full bg-midnight border border-lavender/20 rounded-xl px-3 py-3 text-white text-sm focus:border-gold focus:outline-none">
+                            <option value="">--</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-lavender/60 text-xs mb-1 block">月</label>
+                        <select id="birth-month" class="w-full bg-midnight border border-lavender/20 rounded-xl px-3 py-3 text-white text-sm focus:border-gold focus:outline-none">
+                            <option value="">--</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-lavender/60 text-xs mb-1 block">日</label>
+                        <select id="birth-day" class="w-full bg-midnight border border-lavender/20 rounded-xl px-3 py-3 text-white text-sm focus:border-gold focus:outline-none">
+                            <option value="">--</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="start-reading" class="w-full bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold py-4 rounded-full text-sm tracking-wider hover:scale-[1.02] transition-transform">
+                    鑑定を開始する
+                </button>
+            </div>
+
+            <!-- Loading Animation -->
+            <div id="loading-section" class="hidden text-center py-20">
+                <div class="spin-crystal text-7xl mb-8">🔮</div>
+                <p class="font-serif-jp text-xl text-gold pulse-glow mb-4">鑑定中...</p>
+                <p class="text-lavender/50 text-sm" id="loading-text">星の配置を読み解いています</p>
+            </div>
+
+            <!-- Results -->
+            <div id="results-section" class="hidden space-y-6">
+
+                <!-- Zodiac Card -->
+                <div class="result-card bg-midnight/60 border border-gold/20 rounded-2xl p-8 slide-up">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="text-5xl" id="zodiac-emoji"></span>
+                        <div>
+                            <p class="text-gold/70 text-xs tracking-wider">YOUR ZODIAC</p>
+                            <h3 class="font-serif-jp text-2xl text-gold" id="zodiac-name"></h3>
+                        </div>
+                    </div>
+                    <p class="text-lavender/70 text-sm leading-relaxed" id="zodiac-desc"></p>
+                </div>
+
+                <!-- Life Path Number -->
+                <div class="result-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 slide-up slide-up-delay-1">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-deep-purple/60 border border-gold/30 rounded-full flex items-center justify-center">
+                            <span class="font-serif-jp text-3xl text-gold" id="life-path-num"></span>
+                        </div>
+                        <div>
+                            <p class="text-gold/70 text-xs tracking-wider">LIFE PATH NUMBER</p>
+                            <h3 class="font-serif-jp text-xl text-white">運命数 <span id="life-path-title"></span></h3>
+                        </div>
+                    </div>
+                    <p class="text-lavender/70 text-sm leading-relaxed" id="life-path-desc"></p>
+                </div>
+
+                <!-- Today's Fortune -->
+                <div class="result-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 slide-up slide-up-delay-2">
+                    <h3 class="font-serif-jp text-lg text-white mb-6 text-center">今日の運勢</h3>
+                    <div class="flex justify-center gap-1 mb-6" id="star-rating"></div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-lavender/70">💕 恋愛運</span>
+                                <span class="text-gold text-xs" id="love-score"></span>
+                            </div>
+                            <div class="fortune-bar"><div class="fortune-bar-fill" id="love-bar" style="width:0%"></div></div>
+                            <p class="text-lavender/50 text-xs mt-2" id="love-advice"></p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-lavender/70">💼 仕事運</span>
+                                <span class="text-gold text-xs" id="work-score"></span>
+                            </div>
+                            <div class="fortune-bar"><div class="fortune-bar-fill" id="work-bar" style="width:0%"></div></div>
+                            <p class="text-lavender/50 text-xs mt-2" id="work-advice"></p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-lavender/70">🌿 健康運</span>
+                                <span class="text-gold text-xs" id="health-score"></span>
+                            </div>
+                            <div class="fortune-bar"><div class="fortune-bar-fill" id="health-bar" style="width:0%"></div></div>
+                            <p class="text-lavender/50 text-xs mt-2" id="health-advice"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lucky Items -->
+                <div class="result-card bg-midnight/60 border border-lavender/10 rounded-2xl p-8 slide-up slide-up-delay-3">
+                    <h3 class="font-serif-jp text-lg text-white mb-6 text-center">今日のラッキーアイテム</h3>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <p class="text-2xl mb-2" id="lucky-color-emoji"></p>
+                            <p class="text-lavender/50 text-xs">ラッキーカラー</p>
+                            <p class="text-gold text-sm font-medium" id="lucky-color"></p>
+                        </div>
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <p class="text-2xl mb-2">🔢</p>
+                            <p class="text-lavender/50 text-xs">ラッキーナンバー</p>
+                            <p class="text-gold text-sm font-medium" id="lucky-number"></p>
+                        </div>
+                        <div class="bg-deep-purple/30 rounded-xl p-4">
+                            <p class="text-2xl mb-2">🧭</p>
+                            <p class="text-lavender/50 text-xs">ラッキー方角</p>
+                            <p class="text-gold text-sm font-medium" id="lucky-direction"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="bg-gradient-to-b from-deep-purple/30 to-midnight/60 border border-gold/20 rounded-2xl p-8 text-center slide-up slide-up-delay-4">
+                    <p class="text-gold text-lg font-serif-jp mb-3">もっと詳しい鑑定を受けたい方は</p>
+                    <p class="text-lavender/60 text-sm mb-6 leading-relaxed">
+                        ミニ鑑定はあくまで入り口です。タロットカードと西洋占星術を<br>
+                        組み合わせた本格鑑定で、あなたの未来を深く読み解きます。
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#" id="line-btn" class="inline-flex items-center justify-center gap-2 bg-[#06C755] hover:bg-[#05B04C] text-white font-bold px-8 py-4 rounded-full text-sm transition-all hover:scale-105">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                            </svg>
+                            LINE友だち追加
+                        </a>
+                        <a href="payment.html" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-yellow-600 text-dark-bg font-bold px-8 py-4 rounded-full text-sm transition-all hover:scale-105">
+                            有料鑑定を申し込む
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 border-t border-gold/10 py-8 px-4">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-lavender/30 text-xs">
+            <p>&copy; 2026 月詠みこ All Rights Reserved.</p>
+            <div class="flex gap-6">
+                <a href="index.html" class="hover:text-gold transition-colors">トップページ</a>
+                <a href="payment.html" class="hover:text-gold transition-colors">鑑定のお申し込み</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Stars
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const s = document.createElement('div'); s.className = 'star';
+            const sz = Math.random() * 2 + 1;
+            s.style.width = sz+'px'; s.style.height = sz+'px';
+            s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+            s.style.setProperty('--duration', (Math.random()*3+2)+'s');
+            s.style.animationDelay = Math.random()*5+'s';
+            starsEl.appendChild(s);
+        }
+
+        // Populate dropdowns
+        const yearSel = document.getElementById('birth-year');
+        const monthSel = document.getElementById('birth-month');
+        const daySel = document.getElementById('birth-day');
+        const currentYear = new Date().getFullYear();
+        for (let y = currentYear; y >= 1940; y--) {
+            yearSel.innerHTML += `<option value="${y}" class="bg-midnight">${y}</option>`;
+        }
+        for (let m = 1; m <= 12; m++) {
+            monthSel.innerHTML += `<option value="${m}" class="bg-midnight">${m}月</option>`;
+        }
+        for (let d = 1; d <= 31; d++) {
+            daySel.innerHTML += `<option value="${d}" class="bg-midnight">${d}日</option>`;
+        }
+
+        // Zodiac data
+        const zodiacData = [
+            { sign: '牡羊座', emoji: '♈', en: 'Aries', dates: [3,21,4,19],
+              desc: '情熱と行動力に溢れるあなたは、生まれながらのリーダーです。直感を信じて突き進むその姿は、周囲の人を惹きつけます。恋愛では一目惚れしやすく、ストレートに気持ちを伝えるタイプ。新しいことに挑戦する勇気があなたの最大の武器です。' },
+            { sign: '牡牛座', emoji: '♉', en: 'Taurus', dates: [4,20,5,20],
+              desc: '安定と美を愛するあなたは、五感が非常に鋭い感性の持ち主。一度決めたことは最後までやり遂げる忍耐力があります。恋愛では一途で、相手を大切にする愛情深いタイプ。本物の価値を見極める目を持っています。' },
+            { sign: '双子座', emoji: '♊', en: 'Gemini', dates: [5,21,6,21],
+              desc: '知性とコミュニケーション能力に優れたあなたは、どんな場でも輝く社交性の持ち主。好奇心旺盛で、様々な分野に興味を持ちます。恋愛では会話が弾む相手に惹かれやすく、知的な刺激を求めるタイプです。' },
+            { sign: '蟹座', emoji: '♋', en: 'Cancer', dates: [6,22,7,22],
+              desc: '深い感受性と包容力を持つあなたは、周囲の人を温かく包み込む力があります。家庭や大切な人を守ることに幸せを感じます。恋愛では母性愛が強く、相手を献身的に支えるタイプ。直感が鋭く、相手の本心を見抜く力があります。' },
+            { sign: '獅子座', emoji: '♌', en: 'Leo', dates: [7,23,8,22],
+              desc: '輝くカリスマ性と創造力を持つあなたは、注目を集めることが自然体。堂々とした振る舞いと温かい心で、多くの人から慕われます。恋愛ではドラマチックな展開を好み、相手を楽しませることが得意なタイプです。' },
+            { sign: '乙女座', emoji: '♍', en: 'Virgo', dates: [8,23,9,22],
+              desc: '緻密な分析力と奉仕の精神を持つあなたは、完璧を目指す努力家。細部にまで気を配り、周囲の人をさりげなくサポートします。恋愛では相手の小さな変化にも気づく繊細さがあり、真面目で誠実な愛情を注ぐタイプです。' },
+            { sign: '天秤座', emoji: '♎', en: 'Libra', dates: [9,23,10,23],
+              desc: '美と調和を愛するあなたは、バランス感覚に優れた平和主義者。人間関係を大切にし、誰とでも上手くやっていける社交性があります。恋愛ではパートナーシップを重視し、対等で美しい関係を築きたいタイプです。' },
+            { sign: '蠍座', emoji: '♏', en: 'Scorpio', dates: [10,24,11,22],
+              desc: '深い洞察力と強い意志を持つあなたは、物事の本質を見抜く力があります。一度心を開いた相手には限りない愛情を注ぎます。恋愛では深い絆を求め、表面的な関係には興味がないタイプ。ミステリアスな魅力で相手を惹きつけます。' },
+            { sign: '射手座', emoji: '♐', en: 'Sagittarius', dates: [11,23,12,21],
+              desc: '自由と冒険を愛するあなたは、楽天的で前向きな精神の持ち主。知識欲が旺盛で、未知の世界に飛び込む勇気があります。恋愛では束縛を嫌い、お互いの自由を尊重する関係を好むタイプ。笑顔が周囲を明るくします。' },
+            { sign: '山羊座', emoji: '♑', en: 'Capricorn', dates: [12,22,1,19],
+              desc: '高い目標に向かって着実に歩むあなたは、責任感と忍耐力の塊。社会的な成功を収める力を持っています。恋愛では誠実で、長い時間をかけて信頼関係を築くタイプ。不器用だけど深い愛情の持ち主です。' },
+            { sign: '水瓶座', emoji: '♒', en: 'Aquarius', dates: [1,20,2,18],
+              desc: '独創的なアイデアと博愛精神を持つあなたは、時代の先を行く革新者。常識にとらわれない自由な発想で、周囲を驚かせます。恋愛では友情の延長線上に愛を見出すタイプ。個性的で知的なパートナーに惹かれます。' },
+            { sign: '魚座', emoji: '♓', en: 'Pisces', dates: [2,19,3,20],
+              desc: '豊かな想像力と深い共感力を持つあなたは、目に見えない世界とのつながりが強い神秘的な存在。芸術的な才能に恵まれています。恋愛ではロマンチストで、相手と深い精神的なつながりを求めるタイプです。' },
+        ];
+
+        // Life path data
+        const lifePathData = {
+            1: { title: '開拓者', desc: 'あなたはリーダーシップと独立心を持つ開拓者の魂。自分の道を切り開く力があり、新しいことを始めるのが得意です。自信を持って行動することで、大きな成功を手にすることができるでしょう。恋愛では、あなたの強さに惹かれる人が現れます。' },
+            2: { title: '調和者', desc: 'あなたは繊細な感受性と協調性を持つ調和の使者。人と人の間に立ち、バランスを取ることが天性の才能です。パートナーシップの中で最も力を発揮します。恋愛では、相手の気持ちを深く理解できる優しさが最大の魅力です。' },
+            3: { title: '表現者', desc: 'あなたは創造性と表現力に溢れた芸術家の魂。言葉や芸術を通じて、人の心を動かす力があります。明るく社交的で、周囲を楽しませることが得意です。恋愛では、あなたの明るさとユーモアが相手を幸せにします。' },
+            4: { title: '建設者', desc: 'あなたは堅実で忍耐強い建設者の魂。安定した基盤を作り上げる力があり、計画を着実に実行できます。信頼性が高く、周囲から頼りにされる存在です。恋愛では、時間をかけて築く深い愛情が、何よりも強い絆となります。' },
+            5: { title: '冒険家', desc: 'あなたは変化と自由を愛する冒険家の魂。新しい経験を求めて動き続けるバイタリティがあります。多才で適応力が高く、どんな環境でも輝けます。恋愛では、刺激的で情熱的な関係を好みますが、自由を尊重し合える相手が最適です。' },
+            6: { title: '奉仕者', desc: 'あなたは愛と責任感に溢れた奉仕者の魂。家族や大切な人のために尽くすことに喜びを感じます。美的感覚に優れ、調和のとれた環境を作ることが得意です。恋愛では、深い愛情と包容力で相手を包み込む、最高のパートナーです。' },
+            7: { title: '探求者', desc: 'あなたは知性と神秘性を持つ探求者の魂。物事の本質を見極める鋭い洞察力があります。内面の世界が豊かで、精神的な成長を重視します。恋愛では、深い精神的なつながりを求め、表面的な関係には満足しないタイプです。' },
+            8: { title: '実現者', desc: 'あなたはパワーと成功を引き寄せる実現者の魂。ビジネスセンスに優れ、大きな目標を達成する力があります。物質的な豊かさと精神的な充実のバランスを取ることが課題です。恋愛では、対等で力強いパートナーシップを築きます。' },
+            9: { title: '完成者', desc: 'あなたは博愛精神と智慧を持つ完成者の魂。高い理想を掲げ、世の中をより良くしたいという強い使命感があります。芸術的な才能と癒しの力を持ちます。恋愛では、無条件の愛を注ぐことができる、大きな心の持ち主です。' },
+            11: { title: 'マスター直感者', desc: 'マスターナンバー11を持つあなたは、強い直感力とスピリチュアルな感受性を持つ特別な存在。高い理想とビジョンを持ち、人々を導く力があります。恋愛では、魂のレベルで深くつながれる運命的な出会いが待っています。' },
+            22: { title: 'マスター建築家', desc: 'マスターナンバー22を持つあなたは、壮大なビジョンを現実にする力を持つ特別な存在。実践力と理想のバランスが取れた、最も強力な数字の持ち主です。恋愛では、共に大きな夢を追いかけられるパートナーと出会えるでしょう。' },
+            33: { title: 'マスターヒーラー', desc: 'マスターナンバー33を持つあなたは、無条件の愛と癒しの力を持つ特別な存在。人々の痛みを理解し、癒す使命を持っています。恋愛では、あなたの深い愛情と包容力に、多くの人が救われます。' },
+        };
+
+        const luckyColors = [
+            { name: 'ローズピンク', emoji: '🩷' }, { name: 'ロイヤルブルー', emoji: '💙' },
+            { name: 'エメラルドグリーン', emoji: '💚' }, { name: 'ゴールド', emoji: '💛' },
+            { name: 'ラベンダー', emoji: '💜' }, { name: 'パールホワイト', emoji: '🤍' },
+            { name: 'コーラルレッド', emoji: '❤️' }, { name: 'スカイブルー', emoji: '🩵' },
+            { name: 'サンフラワーイエロー', emoji: '💛' }, { name: 'シルバー', emoji: '🩶' },
+        ];
+        const directions = ['北', '北東', '東', '南東', '南', '南西', '西', '北西'];
+
+        const loveAdvices = [
+            '今日は積極的に気持ちを伝えるチャンス。勇気を出して一歩踏み出してみて。',
+            '穏やかな時間を大切に。さりげない優しさが相手の心に響きます。',
+            '自分磨きに最適な日。内面の美しさが外にも輝きます。',
+            '新しい出会いの予感。いつもと違う場所に足を運んでみましょう。',
+            'パートナーとの絆が深まる日。感謝の気持ちを言葉にして。',
+            '過去の恋愛パターンを見つめ直す良い機会。学びが次の恋を引き寄せます。',
+            '直感を信じて。あなたの心が「この人だ」と感じる人が正解です。',
+            'コミュニケーションがカギ。素直な気持ちで向き合いましょう。',
+        ];
+        const workAdvices = [
+            '新しいプロジェクトを始めるのに最適な日。直感に従って行動を。',
+            '周囲との協力が成功のカギ。チームワークを大切にしましょう。',
+            'アイデアが湧き出る日。メモを取る習慣が幸運を引き寄せます。',
+            '地道な努力が実る時期。コツコツ積み重ねてきたことが報われます。',
+            '変化を恐れないで。新しい挑戦があなたのステージを上げてくれます。',
+            '学びの日。スキルアップに投資することで、大きなリターンが得られます。',
+            'リーダーシップを発揮する場面が。自信を持って意見を述べましょう。',
+            '計画を見直す良いタイミング。戦略を練り直すことで道が開けます。',
+        ];
+        const healthAdvices = [
+            '深呼吸とストレッチで心身をリフレッシュ。自分を労わる時間を大切に。',
+            '水分補給を意識して。デトックス効果で内側から輝きます。',
+            '適度な運動が幸運を呼びます。軽い散歩でもOK。',
+            '睡眠の質を高めましょう。就寝前のリラックスタイムが大切。',
+            'アロマやハーブティーで癒しの時間を。心の安定が全体運を上げます。',
+            '笑顔が最高の健康法。楽しいことを意識的に取り入れて。',
+            '食事に彩りを。旬のものを取り入れるとエネルギーがUPします。',
+            '自然の中で過ごす時間を作りましょう。浄化のエネルギーが満ちています。',
+        ];
+
+        function getZodiac(month, day) {
+            const m = parseInt(month), d = parseInt(day);
+            for (const z of zodiacData) {
+                const [sm, sd, em, ed] = z.dates;
+                if (sm === em) { if (m === sm && d >= sd && d <= ed) return z; }
+                else if (sm > em) { if ((m === sm && d >= sd) || (m === em && d <= ed)) return z; }
+                else { if ((m === sm && d >= sd) || (m === em && d <= ed)) return z; }
+            }
+            return zodiacData[9]; // Default Capricorn
+        }
+
+        function getLifePath(year, month, day) {
+            const str = `${year}${String(month).padStart(2,'0')}${String(day).padStart(2,'0')}`;
+            let sum = str.split('').reduce((a, b) => a + parseInt(b), 0);
+            while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+                sum = String(sum).split('').reduce((a, b) => a + parseInt(b), 0);
+            }
+            return sum;
+        }
+
+        function seededRandom(seed) {
+            let s = seed;
+            return function() {
+                s = (s * 9301 + 49297) % 233280;
+                return s / 233280;
+            };
+        }
+
+        document.getElementById('start-reading').addEventListener('click', () => {
+            const year = document.getElementById('birth-year').value;
+            const month = document.getElementById('birth-month').value;
+            const day = document.getElementById('birth-day').value;
+
+            if (!year || !month || !day) {
+                alert('生年月日をすべて入力してください');
+                return;
+            }
+
+            // Hide input, show loading
+            document.getElementById('input-section').classList.add('hidden');
+            document.getElementById('loading-section').classList.remove('hidden');
+
+            const loadingTexts = [
+                '星の配置を読み解いています',
+                'タロットカードがあなたを呼んでいます',
+                '運命の数字を計算しています',
+                '宇宙からのメッセージを受信中',
+            ];
+            let textIdx = 0;
+            const textInterval = setInterval(() => {
+                textIdx = (textIdx + 1) % loadingTexts.length;
+                document.getElementById('loading-text').textContent = loadingTexts[textIdx];
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(textInterval);
+                document.getElementById('loading-section').classList.add('hidden');
+                showResults(parseInt(year), parseInt(month), parseInt(day));
+            }, 3500);
+        });
+
+        function showResults(year, month, day) {
+            const zodiac = getZodiac(month, day);
+            const lifePath = getLifePath(year, month, day);
+
+            // Seeded random based on birthday + today
+            const today = new Date();
+            const seed = year * 10000 + month * 100 + day + today.getFullYear() * 1000 + (today.getMonth()+1) * 30 + today.getDate();
+            const rng = seededRandom(seed);
+
+            // Zodiac
+            document.getElementById('zodiac-emoji').textContent = zodiac.emoji;
+            document.getElementById('zodiac-name').textContent = zodiac.sign;
+            document.getElementById('zodiac-desc').textContent = zodiac.desc;
+
+            // Life path
+            const lpData = lifePathData[lifePath] || lifePathData[lifePath > 9 ? lifePath : 1];
+            document.getElementById('life-path-num').textContent = lifePath;
+            document.getElementById('life-path-title').textContent = lpData.title;
+            document.getElementById('life-path-desc').textContent = lpData.desc;
+
+            // Overall fortune
+            const overallScore = Math.floor(rng() * 3) + 3; // 3-5 stars
+            const starHtml = Array(5).fill(0).map((_, i) =>
+                `<span class="text-2xl ${i < overallScore ? 'text-gold' : 'text-lavender/20'}">★</span>`
+            ).join('');
+            document.getElementById('star-rating').innerHTML = starHtml;
+
+            // Fortune scores
+            const loveScore = Math.floor(rng() * 40) + 60;
+            const workScore = Math.floor(rng() * 40) + 60;
+            const healthScore = Math.floor(rng() * 40) + 60;
+
+            document.getElementById('love-score').textContent = loveScore + '点';
+            document.getElementById('work-score').textContent = workScore + '点';
+            document.getElementById('health-score').textContent = healthScore + '点';
+
+            document.getElementById('love-advice').textContent = loveAdvices[Math.floor(rng() * loveAdvices.length)];
+            document.getElementById('work-advice').textContent = workAdvices[Math.floor(rng() * workAdvices.length)];
+            document.getElementById('health-advice').textContent = healthAdvices[Math.floor(rng() * healthAdvices.length)];
+
+            // Lucky items
+            const colorIdx = Math.floor(rng() * luckyColors.length);
+            document.getElementById('lucky-color').textContent = luckyColors[colorIdx].name;
+            document.getElementById('lucky-color-emoji').textContent = luckyColors[colorIdx].emoji;
+            document.getElementById('lucky-number').textContent = Math.floor(rng() * 99) + 1;
+            document.getElementById('lucky-direction').textContent = directions[Math.floor(rng() * directions.length)];
+
+            // Show results
+            document.getElementById('results-section').classList.remove('hidden');
+
+            // Animate fortune bars after a short delay
+            setTimeout(() => {
+                document.getElementById('love-bar').style.width = loveScore + '%';
+                document.getElementById('work-bar').style.width = workScore + '%';
+                document.getElementById('health-bar').style.width = healthScore + '%';
+            }, 300);
+
+            // Scroll to results
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
